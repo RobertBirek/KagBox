@@ -2,6 +2,8 @@
 
 **KAG Box** — gotowy do wdrożenia stack do budowy własnych, lokalnie hostowanych baz wiedzy opartych na OpenSPG Knowledge Graph. Dashboard operacyjny, MCP server (Claude Desktop / dowolny MCP klient), pipeline do importu danych — wszystko w jednym `docker compose up`.
 
+> **Uwaga:** To repozytorium jest generyczne — zero śladów Comarch, Taxbell czy Betterfly. Wszystkie nazwy własne i routing zostały usunięte. Dostosuj do swoich baz wiedzy.
+
 ## Spis treści
 
 - [Szybki start](docs/SZYBKI_START.md) — uruchomienie w 5 minut

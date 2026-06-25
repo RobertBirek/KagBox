@@ -61,7 +61,7 @@ services:
 
   openspg-server:
     image: spg-registry.us-west-1.cr.aliyuncs.com/spg/openspg-server:${OPENSPG_IMAGE_TAG:-latest}
-    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-server
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-openspg
     restart: unless-stopped
     networks: [kagbox]
     ports:
@@ -99,15 +99,16 @@ services:
       - "${KAGBOX_PORT:-3410}:3410"
     working_dir: /app
     volumes:
-      - ./server:/app
+      - .:/app
       - kagbox-data:/data
-    command: node src/main.mjs
+    command: node scripts/kagbox_dashboard_server.mjs
     environment:
       KAGBOX_PORT: ${KAGBOX_PORT:-3410}
       KAGBOX_HOST: ${KAGBOX_HOST:-0.0.0.0}
       KAGBOX_BASE_PATH: ${KAGBOX_BASE_PATH:-/}
       KAGBOX_SECRET_KEY: ${KAGBOX_SECRET_KEY:?err}
       KAGBOX_DATA_DIR: /data
+      ROOT: /app
       OPENSPG_API_BASE: http://openspg-server:8887
       OPENSPG_AUTH_COOKIE: ${OPENSPG_AUTH_COOKIE:-}
     depends_on:
@@ -122,16 +123,16 @@ services:
       - "${MCP_PORT:-3400}:3400"
     working_dir: /app
     volumes:
-      - ./mcp:/app
+      - .:/app
       - kagbox-data:/data
-    command: node bridge.mjs
+    command: node scripts/kagbox_mcp_http_bridge.mjs
     environment:
       MCP_PORT: ${MCP_PORT:-3400}
       MCP_HOST: ${MCP_HOST:-0.0.0.0}
       MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:?err}
       MCP_WRITE_TOKEN: ${MCP_WRITE_TOKEN:-}
+      ROOT: /app
       OPENSPG_API_BASE: http://openspg-server:8887
-      KAGBOX_DATA_DIR: /data
 
   kagbox-auth-proxy:
     image: node:${NODE_VERSION:-22-alpine}
@@ -142,8 +143,8 @@ services:
       - "${AUTH_PROXY_PORT:-3401}:3401"
     working_dir: /app
     volumes:
-      - ./mcp:/app
-    command: node auth-proxy.mjs
+      - .:/app
+    command: node mcp/auth-proxy.mjs
     environment:
       AUTH_PROXY_PORT: ${AUTH_PROXY_PORT:-3401}
       AUTH_PROXY_HOST: ${AUTH_PROXY_HOST:-0.0.0.0}
