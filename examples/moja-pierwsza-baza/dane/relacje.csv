@@ -1,0 +1,3 @@
+from_type,from_id,relation,to_type,to_id
+Dokument,DOC-001,odnosi_sie_do,Dokument,DOC-002
+Dokument,DOC-003,odnosi_sie_do,Dokument,DOC-001

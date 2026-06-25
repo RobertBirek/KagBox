@@ -1,0 +1,43 @@
+# ── Przykładowa baza wiedzy: Moja pierwsza baza ──
+# Cele: demonstracja struktury, test pipeline, dokumentacja
+
+namespace: MojaPierwszaBaza
+displayName: Moja pierwsza baza
+description: Przykładowa baza wiedzy do testowania KAG Box
+language: pl
+
+entities:
+  - name: Dokument
+    properties:
+      - name: id
+        type: STRING
+        primaryKey: true
+      - name: nazwa
+        type: STRING
+      - name: opis
+        type: TEXT
+      - name: data_utworzenia
+        type: DATE
+
+  - name: Osoba
+    properties:
+      - name: id
+        type: STRING
+        primaryKey: true
+      - name: imie
+        type: STRING
+      - name: nazwisko
+        type: STRING
+      - name: email
+        type: STRING
+
+relations:
+  - name: utworzony_przez
+    from: Dokument
+    to: Osoba
+    description: Dokument został utworzony przez osobę
+
+  - name: odnosi_sie_do
+    from: Dokument
+    to: Dokument
+    description: Dokument odnosi się do innego dokumentu

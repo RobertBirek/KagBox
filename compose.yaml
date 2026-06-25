@@ -1,0 +1,162 @@
+services:
+
+  # ── OpenSPG core ──────────────────────────────────────
+  openspg-mysql:
+    image: spg-registry.us-west-1.cr.aliyuncs.com/spg/openspg-mysql:${OPENSPG_IMAGE_TAG:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-mysql
+    restart: unless-stopped
+    networks: [kagbox]
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_DATABASE: openspg
+    healthcheck:
+      test: mysqladmin ping -h localhost -uroot -p${MYSQL_ROOT_PASSWORD}
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  openspg-neo4j:
+    image: spg-registry.us-west-1.cr.aliyuncs.com/spg/openspg-neo4j:${OPENSPG_IMAGE_TAG:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-neo4j
+    restart: unless-stopped
+    networks: [kagbox]
+    volumes:
+      - neo4j-data:/data
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?err}
+    healthcheck:
+      test: wget -qO- http://localhost:7474 || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  openspg-minio:
+    image: spg-registry.us-west-1.cr.aliyuncs.com/spg/openspg-minio:${OPENSPG_IMAGE_TAG:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-minio
+    restart: unless-stopped
+    networks: [kagbox]
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:?err}
+    healthcheck:
+      test: curl -f http://localhost:9000/minio/health/live || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  openspg-tika:
+    image: apache/tika:${TIKA_VERSION:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-tika
+    restart: unless-stopped
+    networks: [kagbox]
+    healthcheck:
+      test: curl -f http://localhost:9998 || exit 1
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  openspg-server:
+    image: spg-registry.us-west-1.cr.aliyuncs.com/spg/openspg-server:${OPENSPG_IMAGE_TAG:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-server
+    restart: unless-stopped
+    networks: [kagbox]
+    ports:
+      - "${OPENSPG_API_PORT:-8887}:8887"
+    volumes:
+      - openspg-logs:/opt/openspg/logs
+    environment:
+      OPENSPG_MYSQL_HOST: openspg-mysql
+      OPENSPG_MYSQL_PORT: 3306
+      OPENSPG_MYSQL_DATABASE: openspg
+      OPENSPG_MYSQL_USER: root
+      OPENSPG_MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      OPENSPG_NEO4J_HOST: openspg-neo4j
+      OPENSPG_NEO4J_PORT: 7687
+      OPENSPG_NEO4J_USER: neo4j
+      OPENSPG_NEO4J_PASSWORD: ${NEO4J_PASSWORD:?err}
+      OPENSPG_MINIO_HOST: openspg-minio
+      OPENSPG_MINIO_PORT: 9000
+      OPENSPG_MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      OPENSPG_MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?err}
+      OPENSPG_TIKA_HOST: openspg-tika
+      OPENSPG_TIKA_PORT: 9998
+    depends_on:
+      openspg-mysql: { condition: service_healthy }
+      openspg-neo4j: { condition: service_healthy }
+      openspg-minio: { condition: service_healthy }
+
+  # ── KAG Box services ──────────────────────────────────
+  kagbox-server:
+    image: node:${NODE_VERSION:-22-alpine}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-server
+    restart: unless-stopped
+    networks: [kagbox]
+    ports:
+      - "${KAGBOX_PORT:-3410}:3410"
+    working_dir: /app
+    volumes:
+      - ./server:/app
+      - kagbox-data:/data
+    command: node src/main.mjs
+    environment:
+      KAGBOX_PORT: ${KAGBOX_PORT:-3410}
+      KAGBOX_HOST: ${KAGBOX_HOST:-0.0.0.0}
+      KAGBOX_BASE_PATH: ${KAGBOX_BASE_PATH:-/}
+      KAGBOX_SECRET_KEY: ${KAGBOX_SECRET_KEY:?err}
+      KAGBOX_DATA_DIR: /data
+      OPENSPG_API_BASE: http://openspg-server:8887
+      OPENSPG_AUTH_COOKIE: ${OPENSPG_AUTH_COOKIE:-}
+    depends_on:
+      openspg-server: { condition: service_started }
+
+  kagbox-mcp:
+    image: node:${NODE_VERSION:-22-alpine}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-mcp
+    restart: unless-stopped
+    networks: [kagbox]
+    ports:
+      - "${MCP_PORT:-3400}:3400"
+    working_dir: /app
+    volumes:
+      - ./mcp:/app
+      - kagbox-data:/data
+    command: node bridge.mjs
+    environment:
+      MCP_PORT: ${MCP_PORT:-3400}
+      MCP_HOST: ${MCP_HOST:-0.0.0.0}
+      MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:?err}
+      MCP_WRITE_TOKEN: ${MCP_WRITE_TOKEN:-}
+      OPENSPG_API_BASE: http://openspg-server:8887
+      KAGBOX_DATA_DIR: /data
+
+  kagbox-auth-proxy:
+    image: node:${NODE_VERSION:-22-alpine}
+    container_name: ${COMPOSE_PROJECT_NAME:-kagbox}-auth-proxy
+    restart: unless-stopped
+    networks: [kagbox]
+    ports:
+      - "${AUTH_PROXY_PORT:-3401}:3401"
+    working_dir: /app
+    volumes:
+      - ./mcp:/app
+    command: node auth-proxy.mjs
+    environment:
+      AUTH_PROXY_PORT: ${AUTH_PROXY_PORT:-3401}
+      AUTH_PROXY_HOST: ${AUTH_PROXY_HOST:-0.0.0.0}
+      PROXY_TARGET: http://kagbox-mcp:${MCP_PORT:-3400}
+      PROXY_READ_TOKEN: ${MCP_AUTH_TOKEN:?err}
+
+volumes:
+  mysql-data:
+  neo4j-data:
+  minio-data:
+  openspg-logs:
+  kagbox-data:
+
+networks:
+  kagbox:
+    driver: bridge

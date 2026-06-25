@@ -1,0 +1,5 @@
+id,nazwa,opis,data_utworzenia,utworzony_przez
+DOC-001,Instrukcja obslugi,Instrukcja obslugi systemu ERP w wersji 2024,2024-01-15,OS-001
+DOC-002,Polityka bezpieczenstwa,Wewnetrzna polityka bezpieczenstwa danych,2024-03-01,OS-002
+DOC-003,Raport roczny 2023,Raport finansowy za rok obrotowy 2023,2024-02-28,OS-001
+DOC-004,Standardy kodowania,Zasady i standardy pisania kodu zrodlowego,2024-04-10,OS-003

@@ -1,0 +1,20 @@
+[Unit]
+Description=KAG Box — serwer dashboardu
+After=network.target docker.service
+Wants=docker.service
+
+[Service]
+Type=exec
+WorkingDirectory=/opt/kagbox
+User=kagbox
+Group=kagbox
+ExecStart=/usr/bin/node server/src/main.mjs
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/kagbox/.env
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
