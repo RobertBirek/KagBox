@@ -7,7 +7,7 @@ import process from 'node:process';
 import { randomUUID } from 'node:crypto';
 import { triggerAutomationForDraft } from './dashboard_automation.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const INBOX_ROOT = path.join(ROOT, 'downloads/knowledge_inbox');
 const MAX_TITLE_CHARS = Number(process.env.KAGBOX_DRAFT_MAX_TITLE_CHARS || 200);
 const MAX_CONTENT_CHARS = Number(process.env.KAGBOX_DRAFT_MAX_CONTENT_CHARS || 50000);

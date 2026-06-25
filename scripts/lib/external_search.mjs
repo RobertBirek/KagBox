@@ -15,7 +15,7 @@ import {
   trustRankForTier,
 } from './external_search_policy.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const LOG_DIR = path.join(ROOT, 'logs');
 const FALLBACK_LOG = path.join(LOG_DIR, 'external_search_fallback.jsonl');
 const DISCOVERY_LOG = path.join(LOG_DIR, 'external_search_discovery.jsonl');

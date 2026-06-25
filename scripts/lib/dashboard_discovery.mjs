@@ -9,7 +9,7 @@ import { submitKnowledgeDraft } from './knowledge_inbox.mjs';
 import { findExistingDraftBySourceUrl, normalizeUrl } from './dashboard_source_list.mjs';
 import { TARGET_KBS } from './promoted_knowledge.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 export const DISCOVERY_ROOT = path.join(ROOT, 'data/dashboard/discovery');
 export const DISCOVERY_POLICY_PATH = path.join(DISCOVERY_ROOT, 'policy.json');
 export const DISCOVERY_QUERIES_PATH = path.join(DISCOVERY_ROOT, 'queries.json');

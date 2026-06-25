@@ -100,7 +100,7 @@ import {
   undoDiscoveryCandidate,
 } from './lib/dashboard_discovery.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const HOST = process.env.KAGBOX_DASHBOARD_HOST || '127.0.0.1';
 const PORT = Number(process.env.KAGBOX_DASHBOARD_PORT || 3410);
 const BASE_PATH = normalizeBasePath(process.env.KAGBOX_DASHBOARD_BASE_PATH || '/panel');

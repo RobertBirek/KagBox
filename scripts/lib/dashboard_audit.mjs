@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 export const DASHBOARD_AUDIT_ROOT = path.join(ROOT, 'data/dashboard/audit');
 const AUDIT_LOCK_PATH = path.join(DASHBOARD_AUDIT_ROOT, '.append.lock');
 const REDACTED_KEY = /authorization|cookie|credential|password|secret|token/i;

@@ -11,7 +11,7 @@ import {
   reroutePendingDraft,
 } from './promoted_knowledge.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const SCRIPTS_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const AUTOMATION_ROOT = path.join(ROOT, 'data/dashboard/automation');
 export const AUTOMATION_CONFIG_PATH = path.join(AUTOMATION_ROOT, 'config.json');

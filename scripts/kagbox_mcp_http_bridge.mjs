@@ -27,7 +27,7 @@ const RATE_LIMIT_WINDOW_MS = Number(process.env.KAGBOX_HTTP_RATE_WINDOW_MS || 60
 const RATE_LIMIT_READ = Number(process.env.KAGBOX_HTTP_RATE_READ || 300);
 const RATE_LIMIT_WRITE = Number(process.env.KAGBOX_HTTP_RATE_WRITE || 90);
 const AUDIT_LOG_ENABLED = process.env.KAGBOX_HTTP_AUDIT_LOG_ENABLED !== '0';
-const AUDIT_LOG_PATH = process.env.KAGBOX_HTTP_AUDIT_LOG || '/docker/openspg/data/dashboard/kagbox_mcp_http_audit.jsonl';
+const AUDIT_LOG_PATH = process.env.KAGBOX_HTTP_AUDIT_LOG || '/app/data/dashboard/kagbox_mcp_http_audit.jsonl';
 const AUDIT_LOG_MAX_BYTES = Number(process.env.KAGBOX_HTTP_AUDIT_LOG_MAX_BYTES || 5 * 1024 * 1024);
 const AUDIT_LOG_MAX_FILES = Math.max(1, Number(process.env.KAGBOX_HTTP_AUDIT_LOG_MAX_FILES || 5));
 

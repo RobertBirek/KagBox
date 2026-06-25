@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite --host 0.0.0.0",
+    "build": "vite build dashboard/",
+    "dev": "vite dashboard/ --host 0.0.0.0",
     "check": "node --check scripts/kagbox_dashboard_server.mjs && node --check scripts/kagbox_mcp_http_bridge.mjs && node --check scripts/kagbox_mcp_server.mjs && node --check scripts/lib/build_client.mjs && node --check scripts/lib/build_job_wait.mjs && node --check scripts/lib/build_runner_core.mjs && node --check scripts/lib/dashboard_audit.mjs && node --check scripts/lib/dashboard_automation.mjs && node --check scripts/lib/dashboard_discovery.mjs && node --check scripts/lib/kagbox_mcp_core.mjs && node --check scripts/lib/promoted_knowledge.mjs && node --check scripts/lib/knowledge_inbox.mjs && node --check scripts/lib/safe_http.mjs && node --check scripts/lib/config.mjs && node --check scripts/lib/openspg_auth.mjs && node --check scripts/lib/learning.mjs && node --check scripts/lib/external_search.mjs && node --check scripts/lib/external_search_policy.mjs && node --check scripts/lib/export_utils.mjs && node --check scripts/lib/pdf_text.mjs && node --check scripts/lib/mcp_registry.mjs && node --check scripts/lib/dashboard_source_list.mjs",
     "lint": "eslint --ext .js,.jsx,.mjs scripts/ dashboard/src/ || true"
   },

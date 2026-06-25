@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import process from 'process';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const REGISTRY_PATH = path.join(ROOT, 'docs/reference/mcp_registry.json');
 const USERS_PATH = path.join(ROOT, 'docs/reference/mcp_users.json');
 const MAX_ACTIVE_KEYS = 5;

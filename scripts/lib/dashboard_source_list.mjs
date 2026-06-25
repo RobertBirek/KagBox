@@ -6,7 +6,7 @@ import path from 'path';
 import process from 'process';
 import { loadPromotedKnowledge, listInboxDrafts, TARGET_KBS } from './promoted_knowledge.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const DATA_ROOT = path.join(ROOT, 'data/dashboard');
 export const SOURCE_LIST_PATH = path.join(DATA_ROOT, 'source_list.json');
 export const SOURCE_CREDENTIALS_PATH = path.join(DATA_ROOT, 'source_credentials.json');

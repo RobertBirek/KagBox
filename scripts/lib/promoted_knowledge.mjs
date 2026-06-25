@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { appendDashboardAudit } from './dashboard_audit.mjs';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 export const RAW_INBOX_ROOT = path.join(ROOT, 'downloads/knowledge_inbox');
 export const REVIEW_ROOT = path.join(ROOT, 'docs/reference/knowledge_inbox');
 export const PROMOTED_ROOT = path.join(REVIEW_ROOT, 'promoted');

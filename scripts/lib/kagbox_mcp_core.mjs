@@ -314,8 +314,8 @@ async function draftExternalSourceTool({ kbName, kbNamespace, query, url, title,
 }
 
 function runCommunityThreadTest() {
-  const jsonPath = '/docker/openspg/docs/reference/ERP_Knowledge_Assistant_Community_FullThread_TestPack.json';
-  const mdPath = '/docker/openspg/docs/reference/ERP_Knowledge_Assistant_Community_FullThread_TestPack.md';
+  const jsonPath = '/app/docs/reference/ERP_Knowledge_Assistant_Community_FullThread_TestPack.json';
+  const mdPath = '/app/docs/reference/ERP_Knowledge_Assistant_Community_FullThread_TestPack.md';
   if (!fs.existsSync(jsonPath) || !fs.existsSync(mdPath)) {
     return {
       text: 'Community full-thread benchmark artifacts are missing. Run node scripts/run_community_thread_test.mjs first.',

@@ -3,7 +3,7 @@ import path from 'path';
 import process from 'process';
 import crypto from 'crypto';
 
-const ROOT = process.env.ROOT || '/docker/openspg';
+const ROOT = process.env.ROOT || '/app';
 const GAPS_LOG = path.join(ROOT, 'logs/learning_gaps.jsonl');
 const MAX_DAILY_DRAFTS = Number(process.env.LEARNING_MAX_DAILY_DRAFTS || 20);
 const GAP_LOG_MAX_BYTES = 5 * 1024 * 1024;
